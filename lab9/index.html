@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XML Data Display</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 80%;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #message {
+            margin-top: 15px;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Student Details from XML File</h2>
+
+        <button onclick="loadXML()">Load XML Data</button>
+
+        <p id="message"></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Marks</th>
+                </tr>
+            </thead>
+
+            <tbody id="studentData">
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+
+        async function loadXML() {
+
+            const message = document.getElementById("message");
+            const table = document.getElementById("studentData");
+
+            message.textContent = "";
+            table.innerHTML = "";
+
+            try {
+
+                // Read XML file
+                const response = await fetch("./students.xml");
+
+                if (!response.ok) {
+                    throw new Error("XML file not found!");
+                }
+
+                const data = await response.text();
+
+                // Parse XML data
+                const parser = new DOMParser();
+
+                const xmlDoc = parser.parseFromString(
+                    data, "text/xml"
+                );
+
+                // Check XML errors
+                if (xmlDoc.querySelector("parsererror")) {
+                    throw new Error("Invalid XML format!");
+                }
+
+                // Get student elements
+                const students =
+                    xmlDoc.getElementsByTagName("student");
+
+                if (students.length === 0) {
+                    throw new Error("No student records found!");
+                }
+
+                // Display student data
+                for (let i = 0; i < students.length; i++) {
+
+                    let roll = students[i]
+                        .getElementsByTagName("rollno")[0].textContent;
+
+                    let name = students[i]
+                        .getElementsByTagName("name")[0].textContent;
+
+                    let course = students[i]
+                        .getElementsByTagName("course")[0].textContent;
+
+                    let marks = students[i]
+                        .getElementsByTagName("marks")[0].textContent;
+
+                    let row = table.insertRow();
+
+                    row.insertCell(0).textContent = roll;
+                    row.insertCell(1).textContent = name;
+                    row.insertCell(2).textContent = course;
+                    row.insertCell(3).textContent = marks;
+                }
+
+                message.style.color = "green";
+                message.textContent = "XML data loaded successfully!";
+
+            }
+
+            catch (error) {
+
+                message.style.color = "red";
+                message.textContent = error.message;
+
+                console.error(error);
+            }
+        }
+
+    </script>
+
+</body>
+</html>

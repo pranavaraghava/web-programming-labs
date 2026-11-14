@@ -1,0 +1,27 @@
+
+<students>
+    <student>
+        <rollno>101</rollno>
+        <name>Ravi</name>
+        <course>CSE</course>
+        <marks>85</marks>
+    </student>
+    <student>
+        <rollno>102</rollno>
+        <name>Priya</name>
+        <course>AI</course>
+        <marks>90</marks>
+    </student>
+    <student>
+        <rollno>103</rollno>
+        <name>Arjun</name>
+        <course>ECE</course>
+        <marks>78</marks>
+    </student>
+    <student>
+        <rollno>104</rollno>
+        <name>Divya</name>
+        <course>CSE</course>
+        <marks>92</marks>
+    </student>
+</students>
